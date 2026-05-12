@@ -1,0 +1,1 @@
+# junta-de-propietarios
