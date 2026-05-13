@@ -28,7 +28,7 @@ export class LoginComponent {
         alert('Login correcto');
         this.router.navigate(['/home']); 
       },
-      error: (err: any) => alert(err)
+      error: (err: any) => alert('Contraseña incorrecta')
     });
   }
 }
