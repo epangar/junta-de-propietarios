@@ -1,16 +1,13 @@
 <nav style="display: flex; gap: 15px; padding: 10px; background: #eee;">
 
-  <a routerLink="/home">Home</a>
+  <a routerLink="summary">Home</a>
 
-  <a routerLink="/summary">Resumen</a>
+  <a routerLink="history">Movimientos</a>
 
-  <a routerLink="/history">Movimientos</a>
-
-  <!-- SOLO ADMIN -->
-  <a *ngIf="user.role === 'admin'" routerLink="/manage-users">
+  <a *ngIf="user.role === 'admin'" routerLink="manage-users">
     Gestionar usuarios
   </a>
 
-  <button (click)="logout()">Logout</button>
+  <button (click)="logout()">Cerrar sesión</button>
 
 </nav>

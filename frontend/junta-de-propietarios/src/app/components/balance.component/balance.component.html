@@ -1,0 +1,32 @@
+<h2>Balance General</h2>
+
+<table border="1" width="100%" cellpadding="8">
+
+  <thead>
+    <tr>
+      <th>Concepto</th>
+      <th>Importe</th>
+      <th>Fecha</th>
+      <th *ngIf="user?.role === 'admin'">Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of balance">
+
+      <td>{{ item.concepto }}</td>
+      <td>{{ item.importe }}</td>
+      <td>{{ item.fecha }}</td>
+
+      <td *ngIf="user?.role === 'admin'">
+
+        <button (click)="editMock(item)">
+          Editar
+        </button>
+
+      </td>
+
+    </tr>
+  </tbody>
+
+</table>

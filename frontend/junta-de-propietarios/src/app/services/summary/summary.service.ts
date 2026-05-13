@@ -9,7 +9,11 @@ export class SummaryService {
 
   constructor(private http: HttpClient) {}
 
-  getSummary() {
-    return this.http.get(`${environment.BASEURL}/resumen`);
+  getSummary(year: number) {
+    return this.http.get(`${environment.BASEURL}/resumen/${year}`);
+  }
+
+  getSummaryCategories(year: number) {
+    return this.http.get(`${environment.BASEURL}/resumen/${year}/categorias`);
   }
 }

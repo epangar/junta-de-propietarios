@@ -1,0 +1,73 @@
+<section *ngIf="user.role === 'admin'">
+  <h2>Manage Users</h2>
+
+  <!-- FORMULARIO -->
+  <form (ngSubmit)="save()" #userForm="ngForm" style="border: 1px solid #ccc; padding: 12px; margin-bottom: 20px;">
+
+    <h3>
+      {{ selectedUser ? 'Editar usuario' : 'Crear usuario' }}
+    </h3>
+
+    <!-- EMAIL -->
+    <input type="email" [(ngModel)]="formUser.email" name="email" placeholder="Email" required />
+
+    <br><br>
+
+    <!-- PASSWORD -->
+    <input type="password" [(ngModel)]="formUser.password" name="password" placeholder="Password" />
+
+    <br><br>
+
+    <!-- ROLE -->
+    <select [(ngModel)]="formUser.role" name="role">
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <br><br>
+
+    <!-- BOTONES -->
+    <button type="submit" [disabled]="userForm.invalid">
+      {{ selectedUser ? 'Actualizar' : 'Crear' }}
+    </button>
+
+    <button type="button" *ngIf="selectedUser" (click)="resetForm()">
+      Cancelar
+    </button>
+
+  </form>
+
+  <!-- TABLA -->
+  <h3>Usuarios</h3>
+
+  <table border="1" width="100%" cellpadding="8">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
+
+        <td>
+          <button type="button" (click)="selectUser(user)">
+            Editar
+          </button>
+
+          <button type="button" (click)="deleteUser(user.id!)">
+            Eliminar
+          </button>
+
+          <button type="button" (click)="openAccounting(user)">
+            Contabilidad
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

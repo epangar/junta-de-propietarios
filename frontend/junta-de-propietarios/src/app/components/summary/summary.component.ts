@@ -13,11 +13,12 @@ export class SummaryComponent implements OnInit {
   summary: any = null;
   loading = true;
   error: string | null = null;
+  year: number = new Date().getFullYear();
 
   constructor(private summaryService: SummaryService) {}
 
   ngOnInit() {
-    this.summaryService.getSummary().subscribe({
+    this.summaryService.getSummary(this.year).subscribe({
       next: (data: any) => {
         this.summary = data;
         this.loading = false;

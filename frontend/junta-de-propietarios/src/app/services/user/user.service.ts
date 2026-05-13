@@ -1,29 +1,37 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
 import { environment } from '../../../environments/environment';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService {
 
   constructor(private http: HttpClient) {}
 
+  //  GET usuarios (cuando backend lo active)
   getUsers() {
-    return this.http.get(`${environment.BASEURL}/api/users`);
+    return this.http.get(`${environment.BASEURL}/usuarios`);
   }
 
+  //  crear usuario
   createUser(user: any) {
-    return this.http.post(`${environment.BASEURL}/api/users`, user);
+    return this.http.post(`${environment.BASEURL}/usuarios`, user);
   }
 
-  updateUser(id: string, user: any) {
-    return this.http.put(`${environment.BASEURL}/api/users/${id}`, user);
+  //  actualizar usuario (PATCH /usuarios/{username})
+  updateUser(username: string, user: any) {
+    return this.http.patch(
+      `${environment.BASEURL}/usuarios/${username}`,
+      user
+    );
   }
 
-  deleteUser(id: string) {
-    return this.http.delete(`${environment.BASEURL}/api/users/${id}`);
-  }
+  deactivateUser(username: string) {
+    console.log('deactivateUser llamado para:', username);
 
-  getUserById(id: string) {
-    return this.http.get(`${environment.BASEURL}/api/users/${id}`);
+    // Cuando el backend lo implemente:
+    // return this.http.delete(`${environment.BASEURL}/usuarios/${username}`);
   }
 }
