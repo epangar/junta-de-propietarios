@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -9,11 +10,19 @@ export class SummaryService {
 
   constructor(private http: HttpClient) {}
 
-  getSummary(year: number) {
-    return this.http.get(`${environment.BASEURL}/resumen/${year}`);
-  }
+  getSummary(year: number): Observable<any> {
 
-  getSummaryCategories(year: number) {
-    return this.http.get(`${environment.BASEURL}/resumen/${year}/categorias`);
-  }
+  const token = localStorage.getItem('token');
+
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token || ''}`
+  });
+
+  return this.http.get(
+    `${environment.BASEURL}/resumen/${year}`,
+    { headers }
+  );
+}
+
+  
 }
