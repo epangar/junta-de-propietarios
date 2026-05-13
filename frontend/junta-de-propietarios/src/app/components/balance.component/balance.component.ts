@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { BalanceService } from '../../services/balance/balance.service';
 import { AuthService } from '../../services/auth/auth.service';
@@ -7,36 +8,143 @@ import { AuthService } from '../../services/auth/auth.service';
 @Component({
   selector: 'app-balance',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './balance.component.html'
 })
-export class BalanceGeneralComponent {
+export class BalanceComponent implements OnInit {
 
   balance: any[] = [];
-  user = { role: 'admin' }; // ock rol admin para mostrar balance
-  // user = this.authService.getUser();
+  user: any = null;
+
+  selectedItem: any = null;
+
+  formBalance = {
+    fecha: '',
+    ingresos: 0,
+    gastos: 0,
+    resultado: 0
+  };
+
+  loading = false;
+  startDate: string = '';
+  endDate: string = '';
 
   constructor(
     private balanceService: BalanceService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
+    this.user = this.authService.getUser();
     this.loadBalance();
   }
 
   loadBalance() {
+    this.loading = true;
+
     this.balanceService.getBalance().subscribe({
-      next: (res: any) => this.balance = res,
+      next: (res: any) => {
+        this.balance = res;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => {
+        console.error(err);
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  //  seleccionar fila
+  selectItem(item: any) {
+    this.selectedItem = item;
+
+    this.formBalance = {
+      fecha: item.fecha,
+      ingresos: item.ingresos,
+      gastos: item.gastos,
+      resultado: item.resultado
+    };
+  }
+
+  //  reset
+  resetForm() {
+    this.selectedItem = null;
+
+    this.formBalance = {
+      fecha: '',
+      ingresos: 0,
+      gastos: 0,
+      resultado: 0
+    };
+  }
+
+  //  crear
+  createBalance() {
+    this.balanceService.createBalance(this.formBalance).subscribe({
+      next: (res: any) => {
+        this.balance.push(res);
+        this.resetForm();
+      },
       error: (err: any) => console.error(err)
     });
   }
 
-  createMock() {
-    console.log('crear balance (pendiente backend)');
+  //  actualizar
+  updateBalance() {
+    if (!this.selectedItem) return;
+
+    this.balanceService.updateBalance(
+      this.selectedItem.id_balance,
+      this.formBalance
+    ).subscribe({
+      next: (res: any) => {
+
+        const index = this.balance.findIndex(
+          b => b.id_balance === this.selectedItem.id_balance
+        );
+
+        if (index !== -1) {
+          this.balance[index] = res;
+        }
+
+        this.resetForm();
+      },
+      error: (err: any) => console.error(err)
+    });
   }
 
-  editMock(item: any) {
-    console.log('editar balance:', item);
+  // decisión única
+  save() {
+    this.selectedItem ? this.updateBalance() : this.createBalance();
+  }
+
+  filterByRange() {
+    if (!this.startDate || !this.endDate) return;
+
+    this.loading = true;
+
+    this.balanceService
+      .getBalanceByRange(this.startDate, this.endDate)
+      .subscribe({
+        next: (res: any) => {
+          this.balance = res;
+          this.loading = false;
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          console.error(err);
+          this.loading = false;
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+  resetFilter() {
+    this.startDate = '';
+    this.endDate = '';
+    this.loadBalance();
   }
 }

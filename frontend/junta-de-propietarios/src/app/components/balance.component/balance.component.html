@@ -1,12 +1,92 @@
 <h2>Balance General</h2>
 
+<!-- FORMULARIO -->
+<form *ngIf="user?.role === 'admin'"
+  (ngSubmit)="save()" #balanceForm="ngForm"
+      style="border: 1px solid #ccc; padding: 12px; margin-bottom: 20px;">
+
+  <h3>
+    {{ selectedItem ? 'Editar balance' : 'Crear balance' }}
+  </h3>
+
+  <!-- FECHA -->
+  <label for="fecha">Fecha</label><br>
+  <input type="date"
+         id="fecha"
+         [(ngModel)]="formBalance.fecha"
+         name="fecha"
+         required />
+
+  <br><br>
+
+  <!-- INGRESOS -->
+  <label for="ingresos">Ingresos</label><br>
+  <input type="number"
+         id="ingresos"
+         [(ngModel)]="formBalance.ingresos"
+         name="ingresos"
+         placeholder="Ej: 1000" />
+
+  <br><br>
+
+  <!-- GASTOS -->
+  <label for="gastos">Gastos</label><br>
+  <input type="number"
+         id="gastos"
+         [(ngModel)]="formBalance.gastos"
+         name="gastos"
+         placeholder="Ej: 500" />
+
+  <br><br>
+
+  <!-- RESULTADO -->
+  <label for="resultado">Resultado</label><br>
+  <input type="number"
+         id="resultado"
+         [(ngModel)]="formBalance.resultado"
+         name="resultado"
+         placeholder="Auto o manual" />
+
+  <br><br>
+
+  <!-- BOTONES -->
+  <button type="submit" [disabled]="balanceForm.invalid">
+    {{ selectedItem ? 'Actualizar' : 'Crear' }}
+  </button>
+
+  <button type="button" *ngIf="selectedItem" (click)="resetForm()">
+    Cancelar
+  </button>
+
+</form>
+
+<!-- FILTRO POR FECHA -->
+<div style="margin-bottom: 15px;">
+
+  <label>Fecha inicio:</label>
+  <input type="date" [(ngModel)]="startDate" (change)="filterByRange()" />
+
+  <label style="margin-left: 10px;">Fecha fin:</label>
+  <input type="date" [(ngModel)]="endDate" (change)="filterByRange()" />
+
+  <button (click)="filterByRange()" style="margin-left: 10px;">
+    Filtrar
+  </button>
+
+  <button (click)="resetFilter()" style="margin-left: 5px;">
+    Reset
+  </button>
+
+</div>
+<!-- TABLA -->
 <table border="1" width="100%" cellpadding="8">
 
   <thead>
     <tr>
-      <th>Concepto</th>
-      <th>Importe</th>
       <th>Fecha</th>
+      <th>Ingresos</th>
+      <th>Gastos</th>
+      <th>Resultado</th>
       <th *ngIf="user?.role === 'admin'">Acciones</th>
     </tr>
   </thead>
@@ -14,13 +94,14 @@
   <tbody>
     <tr *ngFor="let item of balance">
 
-      <td>{{ item.concepto }}</td>
-      <td>{{ item.importe }}</td>
       <td>{{ item.fecha }}</td>
+      <td>{{ item.ingresos }}</td>
+      <td>{{ item.gastos }}</td>
+      <td>{{ item.resultado }}</td>
 
       <td *ngIf="user?.role === 'admin'">
 
-        <button (click)="editMock(item)">
+        <button (click)="selectItem(item)">
           Editar
         </button>
 
