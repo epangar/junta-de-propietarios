@@ -1,0 +1,13 @@
+<nav style="display: flex; gap: 15px; padding: 10px; background: #eee;">
+
+  <a routerLink="summary">Home</a>
+
+  <a routerLink="history">Movimientos</a>
+
+  <a *ngIf="user.role === 'admin'" routerLink="manage-users">
+    Gestionar usuarios
+  </a>
+
+  <button (click)="logout()">Cerrar sesión</button>
+
+</nav>
