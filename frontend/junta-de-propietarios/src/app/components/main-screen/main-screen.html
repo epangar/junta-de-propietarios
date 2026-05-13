@@ -1,9 +1,21 @@
-<div style="text-align: center; margin-top: 100px;">
-  <h1>🏠 Main Screen</h1>
+<div style="display: flex; flex-direction: column; align-items: center; height: 100vh;">
+  <h1> Comunidad los Olivos</h1>
 
   <p>Has iniciado sesión correctamente 🎉</p>
 
-  <button (click)="logout()">
-    Cerrar sesión
-  </button>
+  <div style="display:flex; flex-flow: column; max-width: 150px; align-items: center; justify-content: center;">
+    <a routerLink="/forgot-password" style="color: blue; cursor: pointer;">
+      Olvidé mi contraseña
+    </a>
+
+    <a routerLink="/manage-users" style="color: blue; cursor: pointer;">
+      Gestionar usuarios
+    </a>
+
+    <button (click)="logout()">
+      Cerrar sesión
+    </button>
+
+  </div>
+
 </div>
