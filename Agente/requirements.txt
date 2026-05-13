@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+pandas
+openpyxl
+numpy
+python-dotenv
+requests
+
+# IA
+langchain
+langchain-openai
+
+# MCP
+fastmcp
+
+psycopg2
