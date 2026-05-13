@@ -1,0 +1,16 @@
+<h2>Resumen</h2>
+
+<div *ngIf="loading">
+  Cargando...
+</div>
+
+<div *ngIf="error">
+  {{ error }}
+</div>
+
+<div *ngIf="summary">
+
+  <!-- Puedes cambiar esto según lo que devuelva tu backend -->
+  <pre>{{ summary | json }}</pre>
+
+</div>
