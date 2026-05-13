@@ -7,6 +7,7 @@ import { ManageUsersComponent } from './components/manage-users/manage-users.com
 import { HistoryComponent } from './components/history/history.component';
 import { SummaryComponent } from './components/summary/summary.component';
 import { AuthGuard } from './guard/auth.guard';
+import { BalanceComponent } from './components/balance.component/balance.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -15,11 +16,13 @@ export const routes: Routes = [
     path: 'home',
     component: MainScreen,
     canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     children: [
       { path: '', redirectTo: 'summary', pathMatch: 'full' },
       { path: 'summary', component: SummaryComponent },
       { path: 'history', component: HistoryComponent },
-      { path: 'manage-users', component: ManageUsersComponent }
+      { path: 'manage-users', component: ManageUsersComponent },
+      { path: 'balance', component: BalanceComponent },
     ]
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' }
