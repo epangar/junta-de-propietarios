@@ -1,0 +1,31 @@
+<h2>Movimientos</h2>
+
+<div *ngIf="loading">
+  Cargando...
+</div>
+
+<div *ngIf="error">
+  {{ error }}
+</div>
+
+<table *ngIf="!loading && movements.length > 0" border="1" width="100%" cellpadding="8">
+  <thead>
+    <tr>
+      <th>Concepto</th>
+      <th>Cantidad</th>
+      <th>Fecha</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let mov of movements">
+      <td>{{ mov.concepto }}</td>
+      <td>{{ mov.cantidad }}</td>
+      <td>{{ mov.fecha }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!loading && movements.length === 0">
+  No hay movimientos
+</div>
