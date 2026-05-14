@@ -1,34 +1,17 @@
-from pydantic import BaseModel, EmailStr
-from typing import Optional
+from pydantic import BaseModel, EmailStr, ConfigDict
 
-class PropietarioResponse(BaseModel):
-    id_apto: int
-    puerta: str
-    propietario: str | None = None
-    telefono: str | None = None
-    email: str | None = None
-    cuota_mes: float | None = 0
-    derrama: float | None = 0
-    deuda: float | None = 0
-    estado: str
+class PropietarioOut(BaseModel):
+    puerta: str | None
+    nombre_propietario: str | None
+    telefono: str | None
+    email: EmailStr | None
+    estado: str | None
 
-class PropietarioCreate(BaseModel):
-    id_edificio: Optional[int] = None
-    cuota_mes: Optional[float] = 0
-    derrama: Optional[float] = 0
-    deuda: Optional[float] = 0
-    propietario: str
-    telefono: Optional[str] = None
-    email: Optional[EmailStr] = None
-    id_usuario: Optional[int] = None
+    model_config = ConfigDict(from_attributes=True)
 
 class PropietarioUpdate(BaseModel):
-    id_edificio: Optional[int] = None
-    cuota_mes: Optional[float] = None
-    derrama: Optional[float] = None
-    deuda: Optional[float] = None
-    estado: Optional[str] = None
-    propietario: Optional[str] = None
-    telefono: Optional[str] = None
-    email: Optional[EmailStr] = None
-    id_usuario: Optional[int] = None
+    puerta: str | None = None
+    nombre_propietario: str | None = None
+    telefono: str | None = None
+    email: EmailStr | None = None
+    estado: str | None = None
