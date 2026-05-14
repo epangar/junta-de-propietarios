@@ -1,0 +1,36 @@
+nav {
+  display: flex;
+  align-items: center; // Centra verticalmente todos los elementos
+  gap: 15px;
+  padding: 10px;
+  background: #eee;
+
+  p {
+    margin: 0; // Evita que el <p> tenga margen extra
+  }
+
+  a {
+    text-decoration: none;
+    color: blue;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  button {
+    margin-left: auto; // Empuja el botón a la derecha
+    padding: 5px 10px;
+    background: #ccc;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+      background: #bbb;
+    }
+  }
+}
+* {
+    border:1px solid red;
+}

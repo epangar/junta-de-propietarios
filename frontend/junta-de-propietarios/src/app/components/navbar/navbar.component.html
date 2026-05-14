@@ -1,7 +1,8 @@
-<nav style="display: flex; gap: 15px; padding: 10px; background: #eee;">
-  
-  <p>{{ name }}</p>
-  <p>{{ address }}</p>
+<nav 
+  style="display: flex; align-items: center; gap: 15px; padding: 10px; background: #eee;">
+
+  <p style="margin: 0;">{{ name }}</p>
+  <p style="margin: 0;">{{ address }}</p>
 
   <a routerLink="summary">Home</a>
   <a routerLink="balance">Balance</a>
@@ -17,6 +18,10 @@
     Contabilidad
   </a>
 
-  <button (click)="logout()">Cerrar sesión</button>
+  <button 
+    (click)="logout()" 
+    style="margin-left: auto; padding: 5px 10px; background: #ccc; border: none; border-radius: 5px; cursor: pointer;">
+    Cerrar sesión
+  </button>
 
 </nav>

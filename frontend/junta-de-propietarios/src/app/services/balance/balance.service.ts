@@ -31,11 +31,11 @@ export class BalanceService {
   }
 
   getBalanceByRange(startDate: string, endDate: string) {
-    return this.http.get(
-      `${environment.BASEURL}/balance/rango?fecha_inicio=${startDate}&fecha_fin=${endDate}`,
-      this.getHeaders()
-    );
-  }
+  return this.http.get(
+    `${environment.BASEURL}/balance/ver_balance_rango?fecha_inicio=${startDate}&fecha_fin=${endDate}`,
+    this.getHeaders()
+  );
+}
 
   createBalance(balance: any) {
     return this.http.post(

@@ -17,7 +17,7 @@ export class NavbarComponent {
   user: any = null;
 
   name :string = "Comunidad los Olivos";
-  address :string = "Calle Falsa 123";
+  address :string = "Calle Corrales 12";
   puertaUsuario: string = '';
 
   constructor(
@@ -29,7 +29,9 @@ export class NavbarComponent {
   ngOnInit() {
     this.user = this.authService.getUser();
     //this.loadUser();
-    this.puertaUsuario = this.user?.puerta_usuario ?? '';
+    debugger
+    this.puertaUsuario = this.user?.puerta_usuario ?? 'Comunidad los Olivos';
+    this.address = this.user?.direccion_usuario ?? 'Calle Corrales 12';
 }
 
 loadUser() {
