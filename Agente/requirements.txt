@@ -1,16 +1,17 @@
 fastapi
 uvicorn
-pandas
-openpyxl
-numpy
-python-dotenv
-requests
+python-multipart
 
-# IA
-langchain
-langchain-openai
-
-# MCP
 fastmcp
+openai
 
-psycopg2
+pandas
+numpy
+openpyxl
+
+pydantic
+requests
+python-dotenv
+
+tenacity
+loguru
