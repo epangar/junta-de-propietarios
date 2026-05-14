@@ -29,3 +29,32 @@ export class PropietariosService {
     return this.http.patch(`${environment.BASEURL}/propietarios/${puerta}`, propietario);
   }
 }
+
+/**
+ * {
+  "id_apto": 0,
+  "puerta": "string",
+  "cuota_mes": 0,
+  "derrama": 0,
+  "deuda": 0,
+  "estado": "string"
+}
+ */
+
+/***
+ * 
+ * getbyfecha
+ * [
+  {
+    "id_apto": 0,
+    "puerta": "string",
+    "propietario": "string",
+    "telefono": "string",
+    "email": "string",
+    "cuota_mes": 0,
+    "derrama": 0,
+    "deuda": 0,
+    "estado": "string"
+  }
+]
+ * / */
