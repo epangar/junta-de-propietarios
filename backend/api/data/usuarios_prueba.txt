@@ -1,7 +1,6 @@
-Email	                                    Password
-admin@administradora.com 	                admin2026
-
-junta@administradora.com                    junta2026
-	
-propietario@administradora.com              propietario2026
-	
+| Rol         | Email                                                                       | Password          | Puerta |
+| ----------- | --------------------------------------------------------------------------- | ----------------- | ------ |
+| admin       | [admin@administradora.com](mailto:admin@administradora.com)                 | admin2026         | —      |
+| junta       | [junta@administradora.com](mailto:junta@administradora.com)                 | junta2026         | —      |
+| propietario | [propietario1a@administradora.com](mailto:propietario1a@administradora.com) | propietario1a2026 | 1A     |
+| propietario | [propietario1b@administradora.com](mailto:propietario1b@administradora.com) | propietario1b2026 | 1B     |

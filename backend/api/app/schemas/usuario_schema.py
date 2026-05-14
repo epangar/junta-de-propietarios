@@ -1,27 +1,29 @@
-from pydantic import BaseModel, EmailStr, Field
-from typing import Optional, Literal
-
-Rol = Literal["admin", "junta", "contabilidad", "propietario"]
+from datetime import datetime
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 
 class UsuarioCreate(BaseModel):
-    username: str = Field(..., min_length=3, max_length=150)
     email: EmailStr
-    rol: Rol
+    rol: str = Field(pattern="^(admin|junta|propietario)$")
+    puerta_usuario: str | None = None
+    activo: bool = True
 
 class UsuarioUpdate(BaseModel):
-    username: Optional[str] = Field(default=None, min_length=3, max_length=150)
-    email: Optional[EmailStr] = None
-    rol: Optional[Rol] = None
-    activo: Optional[int] = Field(default=None, ge=0, le=1)
+    usermail: EmailStr | None = None
+    email: EmailStr | None = None
+    rol: str | None = Field(default=None, pattern="^(admin|junta|propietario)$")
+    activo: bool | None = None
+    puerta_usuario: str | None = None
 
-class UsuarioResponse(BaseModel):
+class UsuarioOut(BaseModel):
     id_usuario: int
-    username: str
     email: EmailStr
     rol: str
-    activo: int
-    fecha_creacion: str | None = None
-    fecha_modificacion: str | None = None
+    puerta_usuario: str | None
+    fecha_creacion: datetime | None
+    fecha_modificacion: datetime | None
+    activo: bool
 
-class UsuarioCreateResponse(UsuarioResponse):
+    model_config = ConfigDict(from_attributes=True)
+
+class UsuarioCreadoOut(UsuarioOut):
     password_inicial: str
