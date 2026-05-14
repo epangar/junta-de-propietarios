@@ -14,6 +14,10 @@ def insertar_usuario(payload: UsuarioCreate, db: Connection = Depends(get_db)):
     except IntegrityError:
         raise HTTPException(status_code=409, detail="Ya existe un usuario con ese email")
 
+@router.get("/ver_usuarios", response_model=list[UsuarioOut])
+def ver_usuarios(db: Connection = Depends(get_db)):
+    return UsuarioModel.obtener_todos(db)
+
 @router.patch("/modificar_usuario/{username}", response_model=UsuarioOut)
 def modificar_usuario(username: str, payload: UsuarioUpdate, db: Connection = Depends(get_db)):
     user = UsuarioModel.actualizar(db, username, payload.model_dump(exclude_unset=True))

@@ -5,6 +5,17 @@ from app.utils.row import row_to_dict
 
 class UsuarioModel:
     @staticmethod
+    def obtener_todos(db: Connection) -> list[dict]:
+        rows = db.execute(
+            """
+            SELECT id_usuario, email, rol, puerta_usuario, fecha_creacion, fecha_modificacion, activo
+            FROM Usuario
+            ORDER BY id_usuario
+            """
+        ).fetchall()
+        return [row_to_dict(row) for row in rows]
+
+    @staticmethod
     def obtener_por_email(db: Connection, email: str) -> dict | None:
         return row_to_dict(db.execute("SELECT * FROM Usuario WHERE email = ?", (email,)).fetchone())
 
