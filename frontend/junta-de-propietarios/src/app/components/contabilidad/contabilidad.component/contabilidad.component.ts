@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GastosService } from '../../../services/gastos/gastos.service';
 import { AuthService } from '../../../services/auth/auth.service';
@@ -12,13 +12,14 @@ import { AuthService } from '../../../services/auth/auth.service';
 export class AccountingComponent implements OnInit {
 
   data: any[] = [];
-  //loading = false;
+  loading = false;
 
   puerta: string = '';
 
   constructor(
     private gastosService: GastosService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -30,16 +31,22 @@ export class AccountingComponent implements OnInit {
   }
 
   loadData() {
-    //this.loading = true;
+    this.loading = true;
 
     this.gastosService.getGastosByPuerta(this.puerta).subscribe({
       next: (res: any) => {
-        this.data = [...res];
-        //this.loading = false;
+        this.data = Array.isArray(res) ? res : res.data;
+        console.log('Longitud del array:', res.length);
+
+        this.loading = false;
+              this.cdr.detectChanges(); // fuerza renderizado
+
       },
       error: (err: any) => {
         console.error(err);
-        //this.loading = false;
+        this.loading = false;
+              this.cdr.detectChanges(); // fuerza renderizado
+
       }
     });
   }
