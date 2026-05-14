@@ -29,7 +29,6 @@ export class NavbarComponent {
   ngOnInit() {
     this.user = this.authService.getUser();
     //this.loadUser();
-    debugger
     this.puertaUsuario = this.user?.puerta_usuario ?? 'Comunidad los Olivos';
     this.address = this.user?.direccion_usuario ?? 'Calle Corrales 12';
 }

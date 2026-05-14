@@ -12,7 +12,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 export class AccountingComponent implements OnInit {
 
   data: any[] = [];
-  loading = false;
+  //loading = false;
 
   puerta: string = '';
 
@@ -24,23 +24,22 @@ export class AccountingComponent implements OnInit {
   ngOnInit() {
     const user = this.authService.getUser();
     this.puerta = user?.puerta_usuario;
-
     if (this.puerta) {
       this.loadData();
     }
   }
 
   loadData() {
-    this.loading = true;
+    //this.loading = true;
 
     this.gastosService.getGastosByPuerta(this.puerta).subscribe({
       next: (res: any) => {
-        this.data = res;
-        this.loading = false;
+        this.data = [...res];
+        //this.loading = false;
       },
       error: (err: any) => {
         console.error(err);
-        this.loading = false;
+        //this.loading = false;
       }
     });
   }
