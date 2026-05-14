@@ -1,119 +1,132 @@
 from fastmcp import Client
+from llm.client import get_llm
 import json
-import pandas as pd
-import numpy as np
-import math
+
 
 client = Client("http://127.0.0.1:8001/mcp")
 
 
-# ----------------------------
-# SAFE JSON CONVERTER (CLAVE)
-# ----------------------------
-def safe_json(obj):
-    if isinstance(obj, dict):
-        return {k: safe_json(v) for k, v in obj.items()}
+async def run_agent(file_path: str):
 
-    if isinstance(obj, list):
-        return [safe_json(v) for v in obj]
+    llm = get_llm()
 
-    if isinstance(obj, pd.Timestamp):
-        return obj.isoformat()
+    messages = [
+        {
+            "role": "system",
+            "content": """
+Eres un AGENTE autónomo de transformación Excel → SQLite.
 
-    if isinstance(obj, (np.integer, np.int64)):
-        return int(obj)
+Tienes acceso a tools MCP:
 
-    if isinstance(obj, (np.floating, np.float64)):
-        if math.isnan(obj):
-            return None
-        return float(obj)
+TOOLS:
+- read_excel(file_path)
+- list_tables()
+- get_schema(table_name)
+- export_excel(data, output_name)
+- insert_rows(table, rows)
 
-    if isinstance(obj, float) and math.isnan(obj):
-        return None
+REGLAS:
+- SOLO puedes usar tools
+- No inventes datos
+- No inventes columnas
+- Siempre basa todo en outputs de tools
 
-    return obj
+REGLA CRÍTICA NUEVA:
+
+- Debes detectar datos basura o de prueba
+- Si el contenido del Excel parece texto aleatorio, test o frases sin estructura:
+  → debes TERMINAR con error (action: finish)
+
+EJEMPLOS DE BASURA:
+- "hola", "como vas"
+- "test", "prueba", "asdf"
+- frases sin relación con datos reales de negocio
+
+EJEMPLO DE DATOS VALIDOS:
+- nombres, emails, direcciones, productos, registros estructurados
 
 
-async def run_agent(sheets):
+FLUJO IDEAL:
+1. read_excel
+2. list_tables
+3. get_schema
+4. transformar datos
+5. export_excel
+
+RESPONDE SIEMPRE EN JSON:
+
+Si quieres usar tool:
+{
+  "action": "tool_name",
+  "args": {}
+}
+
+Si quieres terminar:
+{
+  "action": "finish",
+  "output_file": "ruta"
+}
+"""
+        },
+        {
+            "role": "user",
+            "content": f"Procesa este archivo: {file_path}"
+        }
+    ]
 
     async with client:
 
-        # ------------------------
-        # BD STRUCTURE
-        # ------------------------
-        tables_result = await client.call_tool("list_tables", {})
-        tables = json.loads(tables_result.content[0].text)["tables"]
+        for _ in range(15):
 
-        database_structure = {}
+            response = llm.invoke(messages)
 
-        for table in tables:
-            schema_result = await client.call_tool(
-                "get_db_schema",
-                {"table_name": table}
-            )
+            content = response.content.strip()
 
-            schema = json.loads(schema_result.content[0].text)
+            # 🔥 FIX WINDOWS PATHS
+            content = content.replace("\\", "/")
 
-            database_structure[table] = {
-                "columns": schema["columns"]
-            }
+            try:
+                action_json = json.loads(content)
+            except Exception:
+                raise Exception(f"El LLM NO devolvió JSON válido:\n{content}")
 
-        # ------------------------
-        # EXCEL STRUCTURE
-        # ------------------------
-        excel_structure = {}
+            messages.append({
+                "role": "assistant",
+                "content": content
+            })
 
-        for sheet_name, df in sheets.items():
+            action = action_json.get("action")
 
-            sample_rows = df.head(5).to_dict(orient="records")
-            sample_rows = safe_json(sample_rows)
+            # -------------------------
+            # FIN
+            # -------------------------
+            if action == "finish":
+                return {
+                    "status": "ok",
+                    "file": action_json.get("output_file")
+                }
 
-            excel_structure[sheet_name] = {
-                "columns": list(df.columns),
-                "sample_data": sample_rows
-            }
+            # -------------------------
+            # TOOL CALL
+            # -------------------------
+            tool_args = action_json.get("args", {})
 
-        # ------------------------
-        # PROMPT LLM (opcional pero útil)
-        # ------------------------
-        prompt = f"""
-Eres un analizador de estructuras de datos.
+            try:
+                tool_result = await client.call_tool(action, tool_args)
+                tool_output = tool_result.content[0].text
+            except Exception as e:
+                tool_output = json.dumps({"error": str(e)})
 
-Tienes:
+            # 🔥 IMPORTANTÍSIMO: devolver contexto al LLM
+            messages.append({
+                "role": "user",
+                "content": f"""
+Resultado tool {action}:
 
-1. ESTRUCTURA EXCEL:
-{json.dumps(excel_structure, indent=2, ensure_ascii=False)}
+{tool_output}
 
-2. ESTRUCTURA BASE DE DATOS:
-{json.dumps(database_structure, indent=2, ensure_ascii=False)}
-
-TAREA:
-- Describe si puedes leer correctamente el Excel
-- Describe si puedes leer correctamente la BD
-- No hagas validaciones
-- No compares
-- Solo explica estructuras detectadas
-
-RESPONDE EN JSON:
-{{
-  "excel_ok": true,
-  "db_ok": true,
-  "resumen_excel": "",
-  "resumen_db": ""
-}}
+Decide siguiente acción.
 """
+            })
 
-        response = await client.call_tool("list_tables", {})  # keep alive
-        # (puedes quitar esto si quieres)
-
-        # aquí asumo que tienes LLM externo:
-        # llm = get_llm()
-        # result = llm.invoke(prompt)
-
-        # 🔥 SIN LLM fallback (estructura pura)
-        result = {
-            "excel_structure": excel_structure,
-            "database_structure": database_structure
-        }
-
-        return result
+    raise Exception("El agente no terminó en el límite de pasos")
