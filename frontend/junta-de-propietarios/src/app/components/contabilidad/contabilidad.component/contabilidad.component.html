@@ -6,7 +6,7 @@
   Cargando...
 </div>
 
-<table border="1" width="100%" cellpadding="8" *ngIf="!loading && data.length">
+<table border="1" width="100%" cellpadding="8" *ngIf="!loading && data?.length">
   <thead>
     <tr>
       
@@ -32,6 +32,6 @@
   </tbody>
 </table>
 
-<p *ngIf="!loading && !data.length">
+<p *ngIf="!loading && (!data || !data.length)">
   No hay datos para esta puerta
 </p>

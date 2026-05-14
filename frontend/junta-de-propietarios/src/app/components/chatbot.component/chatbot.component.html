@@ -6,8 +6,8 @@
     <h3>📄 Documento</h3>
 
     <label class="upload">
-      {{ nombreArchivo || 'Subir .txt' }}
-      <input type="file" (change)="cargarArchivo($event)" accept=".txt">
+      {{ nombreArchivo || 'Subir archivo .txt,.pdf,.xlsx o .xls' }}
+      <input type="file" (change)="cargarArchivo($event)" accept=".txt,.pdf,.xlsx,.xls">
     </label>
 
     <p class="status" [class.ok]="textoDelActa">
@@ -45,7 +45,7 @@
         [(ngModel)]="miPregunta"
         (keyup.enter)="preguntar()"
         placeholder="Escribe tu pregunta..."
-        [disabled]="!textoDelActa || cargando">
+        >
 
       <button (click)="preguntar()" [disabled]="!miPregunta || cargando">
         ➤
