@@ -8,6 +8,7 @@ import { HistoryComponent } from './components/history/history.component';
 import { SummaryComponent } from './components/summary/summary.component';
 import { AuthGuard } from './guard/auth.guard';
 import { BalanceComponent } from './components/balance.component/balance.component';
+import { ChatComponent } from './components/chatbot.component/chatbot.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -23,6 +24,7 @@ export const routes: Routes = [
       { path: 'history', component: HistoryComponent },
       { path: 'manage-users', component: ManageUsersComponent },
       { path: 'balance', component: BalanceComponent },
+      { path: 'chatbot', component: ChatComponent },
     ]
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' }

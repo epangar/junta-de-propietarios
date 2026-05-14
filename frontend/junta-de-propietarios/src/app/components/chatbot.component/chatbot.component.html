@@ -1,0 +1,77 @@
+<div class="dashboard-container">
+  <!-- Cabecera -->
+  <header class="main-header">
+    <div class="logo">
+      <span class="icon">🤖</span>
+      <h1>ChatActas AI</h1>
+    </div>
+    <div class="user-info">
+      <span>Sesión: Estudiante</span>
+    </div>
+  </header>
+
+  <div class="main-content">
+    <!-- Columna Izquierda: Configuración -->
+    <aside class="sidebar">
+      <div class="card">
+        <h3>1. Cargar Documento</h3>
+        <label class="file-upload">
+          <span class="btn-upload">{{ nombreArchivo || 'Seleccionar .txt' }}</span>
+          <input type="file" (change)="cargarArchivo($event)" accept=".txt" hidden>
+        </label>
+        
+        <div class="status-badge" [class.ready]="textoDelActa">
+          {{ textoDelActa ? '✅ Archivo listo' : '❌ Sin archivo' }}
+        </div>
+      </div>
+
+      <div class="card info-card" *ngIf="textoDelActa">
+        <h3>Resumen del archivo</h3>
+        <p><strong>Tamaño:</strong> {{ textoDelActa.length }} caracteres</p>
+        <p><strong>Líneas:</strong> {{ textoDelActa.split('\n').length }}</p>
+      </div>
+    </aside>
+
+    <!-- Columna Derecha: Chat -->
+    <main class="chat-section">
+      <div class="chat-window">
+        <!-- Mensaje de bienvenida fijo -->
+        <div class="message ia">
+          <div class="bubble">
+            Hola, ¿en qué puedo ayudarte con las actas hoy?
+          </div>
+        </div>
+
+        <!-- Mensajes dinámicos -->
+        <div *ngFor="let msg of mensajes" class="message" [ngClass]="msg.rol">
+          <div class="bubble">
+            {{ msg.texto }}
+          </div>
+        </div>
+
+        <!-- Indicador de carga (Spinner) -->
+        <div *ngIf="cargando" class="message ia">
+          <div class="bubble thinking">La IA está analizando las actas...</div>
+        </div>
+      </div>
+
+      <!-- Barra de entrada de texto -->
+      <footer class="chat-input-area">
+        <div class="input-wrapper">
+          <input 
+            type="text" 
+            [(ngModel)]="miPregunta" 
+            (keyup.enter)="preguntar()"
+            placeholder="Escribe tu pregunta sobre el acta aquí..."
+            [disabled]="!textoDelActa || cargando">
+          
+          <button 
+            (click)="preguntar()" 
+            [disabled]="!miPregunta || !textoDelActa || cargando">
+            <span>➤</span>
+          </button>
+        </div>
+      </footer>
+    </main>
+  </div>
+</div>

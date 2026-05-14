@@ -23,7 +23,7 @@ export class ManageUsersComponent {
   };
 
   // user = { role: 'admin' }; // ock rol admin para mostrar gestión de usuarios
-  user = null; // rol real desde localStorage
+  user = {role: ''}; // rol real desde localStorage
 
   constructor(
     private userService: UserService,
