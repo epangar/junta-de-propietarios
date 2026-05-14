@@ -10,7 +10,7 @@ import { RouterOutlet } from '@angular/router';
 })
 export class MainScreen {
 
-  name :string = "Comunidad los Olivos";
+  
   user = { role: 'admin' };
 
   constructor(private router: Router) {}
