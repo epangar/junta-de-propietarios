@@ -87,6 +87,7 @@
       <th>Ingresos</th>
       <th>Gastos</th>
       <th>Resultado</th>
+      <th>Categoría</th>
       <th *ngIf="user?.role === 'admin'">Acciones</th>
     </tr>
   </thead>
@@ -98,6 +99,7 @@
       <td>{{ item.ingresos }}</td>
       <td>{{ item.gastos }}</td>
       <td>{{ item.resultado }}</td>
+      <td>{{ item.categoria }}</td>
 
       <td *ngIf="user?.role === 'admin'">
 

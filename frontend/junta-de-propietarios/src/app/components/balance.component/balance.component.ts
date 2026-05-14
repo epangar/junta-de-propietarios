@@ -22,7 +22,8 @@ export class BalanceComponent implements OnInit {
     fecha: '',
     ingresos: 0,
     gastos: 0,
-    resultado: 0
+    resultado: 0,
+    categoria: ''
   };
 
   loading = false;
@@ -65,7 +66,8 @@ export class BalanceComponent implements OnInit {
       fecha: item.fecha,
       ingresos: item.ingresos,
       gastos: item.gastos,
-      resultado: item.resultado
+      resultado: item.resultado,
+      categoria: item.categoria
     };
   }
 
@@ -77,8 +79,10 @@ export class BalanceComponent implements OnInit {
       fecha: '',
       ingresos: 0,
       gastos: 0,
-      resultado: 0
+      resultado: 0,
+      categoria: ''
     };
+    this.cdr.detectChanges(); 
   }
 
   //  crear
