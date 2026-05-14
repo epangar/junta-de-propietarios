@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GastosService } from '../../../services/gastos/gastos.service.py';
+import { GastosService } from '../../../services/gastos/gastos.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-accounting',
@@ -8,18 +9,23 @@ import { GastosService } from '../../../services/gastos/gastos.service.py';
   imports: [CommonModule],
   templateUrl: './contabilidad.component.html'
 })
-export class AccountingComponent {
-
-  @Input() puerta: string = '';
-  @Input() visible: boolean = false;
+export class AccountingComponent implements OnInit {
 
   data: any[] = [];
   loading = false;
 
-  constructor(private gastosService: GastosService) {}
+  puerta: string = '';
 
-  ngOnChanges() {
-    if (this.visible && this.puerta) {
+  constructor(
+    private gastosService: GastosService,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit() {
+    const user = this.authService.getUser();
+    this.puerta = user?.puerta_usuario;
+
+    if (this.puerta) {
       this.loadData();
     }
   }
@@ -37,9 +43,5 @@ export class AccountingComponent {
         this.loading = false;
       }
     });
-  }
-
-  close() {
-    this.visible = false;
   }
 }

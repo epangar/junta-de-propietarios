@@ -25,7 +25,7 @@ export class BalanceService {
 
   getBalance() {
     return this.http.get(
-      `${environment.BASEURL}/balance`,
+      `${environment.BASEURL}/balance/ver_balance`,
       this.getHeaders()
     );
   }

@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { UserService } from '../../services/user/user.service';
 import { AuthService } from '../../services/auth/auth.service';
-import {AccountingComponent} from '../contabilidad/contabilidad.component/contabilidad.component';
+import { AccountingComponent } from '../contabilidad/contabilidad.component/contabilidad.component';
 
 @Component({
   selector: 'app-manage-users',
@@ -12,21 +12,24 @@ import {AccountingComponent} from '../contabilidad/contabilidad.component/contab
   imports: [CommonModule, FormsModule, AccountingComponent],
   templateUrl: './manage-users.component.html'
 })
-export class ManageUsersComponent {
+export class ManageUsersComponent implements OnInit {
 
   users: any[] = [];
   selectedUser: any = null;
 
+  // SOLO UI FORM
   formUser = {
     email: '',
     password: '',
-    role: 'user'
+    rol: 'user',
+    puerta_usuario: '' as string | null
   };
 
-  // user = { role: 'admin' }; // ock rol admin para mostrar gestión de usuarios
-  user = {role: ''}; // rol real desde localStorage
-showAccounting = false;
-selectedPuerta = '';
+  user: any = { rol: '' };
+
+  showAccounting = false;
+  selectedPuerta = '';
+
   constructor(
     private userService: UserService,
     private authService: AuthService,
@@ -38,96 +41,120 @@ selectedPuerta = '';
     this.loadUsers();
   }
 
-  //  GET usuarios (cuando lo tengas en backend)
   loadUsers() {
-    // si aún no existe GET, esto se puede mockear
-    this.users  = [
-  { id: '1', email: 'admin@test.com', role: 'admin', password: '' },
-  { id: '2', email: 'user1@test.com', role: 'user', password: '' },
-  { id: '3', email: 'user2@test.com', role: 'user', password: '' },
-  { id: '4', email: 'manager@test.com', role: 'admin', password: '' },
-  { id: '5', email: 'user3@test.com', role: 'user', password: '' },
-  { id: '6', email: 'user4@test.com', role: 'user', password: '' },
-  { id: '7', email: 'user5@test.com', role: 'user', password: '' },
-  { id: '8', email: 'user6@test.com', role: 'user', password: '' },
-  { id: '9', email: 'user7@test.com', role: 'user', password: '' },
-  { id: '10', email: 'user8@test.com', role: 'admin', password: '' },
-  { id: '11', email: 'user9@test.com', role: 'user', password: '' },
-  { id: '12', email: 'user10@test.com', role: 'user', password: '' }
-];
+    this.userService.getUsers().subscribe({
+      next: (res: any) => {
+        this.users = res;
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => console.error(err)
+    });
   }
 
-  //  seleccionar usuario
   selectUser(user: any) {
     this.selectedUser = user;
 
     this.formUser = {
       email: user.email,
       password: '',
-      role: user.role
+      rol: user.rol,
+      puerta_usuario: user.puerta_usuario || null
     };
   }
 
-  //  reset form
   resetForm() {
     this.selectedUser = null;
+
     this.formUser = {
       email: '',
       password: '',
-      role: 'user'
+      rol: 'user',
+      puerta_usuario: null
     };
   }
 
-  //  crear usuario (POST /usuarios)
   createUser() {
-    this.userService.createUser(this.formUser).subscribe({
+    const payload = {
+      email: this.formUser.email,
+      rol: this.formUser.rol,
+      puerta_usuario: this.formUser.puerta_usuario || null,
+      activo: true
+    };
+
+    this.userService.createUser(payload).subscribe({
       next: (res: any) => {
         this.users.push(res);
         this.resetForm();
+        this.cdr.detectChanges();
       },
       error: (err: any) => console.error(err)
     });
   }
 
-  //  actualizar usuario (PATCH /usuarios/{username})
   updateUser() {
     if (!this.selectedUser) return;
 
-    this.userService.updateUser(
-      this.selectedUser.email,
-      this.formUser
-    ).subscribe({
-      next: (res: any) => {
+    const payload = {
+      email: this.formUser.email,
+      rol: this.formUser.rol,
+      puerta_usuario: this.formUser.puerta_usuario || null,
+      activo: this.selectedUser.activo
+    };
 
-        const index = this.users.findIndex(
-          u => u.email === this.selectedUser.email
-        );
+    this.userService.updateUser(this.selectedUser.email, payload)
+      .subscribe({
+        next: (res: any) => {
 
-        if (index !== -1) {
-          this.users[index] = res;
-        }
+          const index = this.users.findIndex(
+            u => u.email === this.selectedUser.email
+          );
 
-        this.resetForm();
-      },
-      error: (err: any) => console.error(err)
-    });
+          if (index !== -1) {
+            this.users[index] = res;
+          }
+
+          this.resetForm();
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => console.error(err)
+      });
   }
 
-  //  decidir acción
   save() {
     this.selectedUser ? this.updateUser() : this.createUser();
   }
 
-  //  deactivate (temporal frontend)
-  deactivateUser(user: any) {
-    this.users = this.users.filter(u => u.email !== user.email);
+  toggleActive(user: any) {
+    const payload = {
+      ...user,
+      activo: !user.activo
+    };
+
+    this.userService.updateUser(user.email, payload)
+      .subscribe({
+        next: (res: any) => {
+
+          const index = this.users.findIndex(
+            u => u.email === user.email
+          );
+
+          if (index !== -1) {
+            this.users[index] = res;
+          }
+
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => console.error(err)
+      });
   }
 
-  //  acción contabilidad
   openAccounting(user: any) {
-    console.log('Contabilidad del usuario:', user);
-    this.selectedPuerta = user.puerta; 
-    // o cualquier identificador único
+    this.selectedPuerta = user.puerta_usuario;
     this.showAccounting = true;
+  }
+
+  closeAccounting() {
+    this.showAccounting = false;
+    this.selectedPuerta = '';
   }
 }

@@ -11,7 +11,7 @@ import { RouterOutlet } from '@angular/router';
 export class MainScreen {
 
   
-  user = { role: 'admin' };
+  user = { rol: 'admin' };
 
   constructor(private router: Router) {}
 

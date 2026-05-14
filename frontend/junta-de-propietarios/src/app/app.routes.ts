@@ -9,6 +9,7 @@ import { SummaryComponent } from './components/summary/summary.component';
 import { AuthGuard } from './guard/auth.guard';
 import { BalanceComponent } from './components/balance.component/balance.component';
 import { ChatComponent } from './components/chatbot.component/chatbot.component';
+import { AccountingComponent } from './components/contabilidad/contabilidad.component/contabilidad.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -25,6 +26,7 @@ export const routes: Routes = [
       { path: 'manage-users', component: ManageUsersComponent },
       { path: 'balance', component: BalanceComponent },
       { path: 'chatbot', component: ChatComponent },
+      {path: 'contabilidad', component: AccountingComponent }
     ]
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' }

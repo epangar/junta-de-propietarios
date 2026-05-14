@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BuildingService } from '../../services/building/building.service';
+import { UserService } from '../../services/user/user.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { User } from '../../models/User.model';
 
 @Component({
   selector: 'app-navbar',
@@ -11,19 +14,35 @@ import { BuildingService } from '../../services/building/building.service';
 })
 export class NavbarComponent {
 
-  // 👇 MOCK temporal (mañana lo conectas a AuthService)
-  user = {
-    role: 'admin' // cambia a 'user' para probar
-  };
+  user: any = null;
 
   name :string = "Comunidad los Olivos";
   address :string = "Calle Falsa 123";
+  puertaUsuario: string = '';
 
-  constructor(private router: Router, private buildingService: BuildingService) {}
+  constructor(
+  private router: Router,
+  private buildingService: BuildingService,
+  private authService: AuthService
+) {}
 
-  ngOninit() {
+  ngOnInit() {
+    this.user = this.authService.getUser();
+    //this.loadUser();
+    this.puertaUsuario = this.user?.puerta_usuario ?? '';
+}
 
-  }
+loadUser() {
+  this.authService.getUser().subscribe({
+    next: (user: User) => {
+      this.user = user;
+    },
+    error: (err: any) => {
+      console.error(err);
+      this.user = null;
+    }
+  });
+}
 
   getBuildingData() {
     this.buildingService.getBuilding().subscribe({
@@ -36,6 +55,7 @@ export class NavbarComponent {
       }
     });
   }     
+  
   
   logout() {
     alert('Sesión cerrada');

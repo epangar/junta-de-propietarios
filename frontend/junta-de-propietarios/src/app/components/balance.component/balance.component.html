@@ -1,7 +1,7 @@
 <h2>Balance General</h2>
 
 <!-- FORMULARIO -->
-<form *ngIf="user?.role === 'admin'"
+<form *ngIf="user?.rol === 'admin'"
   (ngSubmit)="save()" #balanceForm="ngForm"
       style="border: 1px solid #ccc; padding: 12px; margin-bottom: 20px;">
 
@@ -88,7 +88,7 @@
       <th>Gastos</th>
       <th>Resultado</th>
       <th>Categoría</th>
-      <th *ngIf="user?.role === 'admin'">Acciones</th>
+      <th *ngIf="user?.rol === 'admin'">Acciones</th>
     </tr>
   </thead>
 
@@ -101,7 +101,7 @@
       <td>{{ item.resultado }}</td>
       <td>{{ item.categoria }}</td>
 
-      <td *ngIf="user?.role === 'admin'">
+      <td *ngIf="user?.rol === 'admin'">
 
         <button (click)="selectItem(item)">
           Editar

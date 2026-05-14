@@ -1,39 +1,37 @@
-<div *ngIf="visible" class="overlay">
+<h2>Contabilidad</h2>
 
-  <div class="modal">
+<p><strong>Puerta:</strong> {{ puerta }}</p>
 
-    <h2>Contabilidad {{ puerta }}</h2>
-
-    <div *ngIf="loading">Cargando...</div>
-
-    <table *ngIf="!loading" border="1" width="100%" cellpadding="6">
-
-      <thead>
-        <tr>
-          <th>Fecha</th>
-          <th>Cuota</th>
-          <th>Derrama</th>
-          <th>Pago</th>
-          <th>Deuda</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let item of data">
-          <td>{{ item.fecha }}</td>
-          <td>{{ item.cuota_mes }}</td>
-          <td>{{ item.derrama }}</td>
-          <td>{{ item.pago }}</td>
-          <td>{{ item.deuda }}</td>
-        </tr>
-      </tbody>
-
-    </table>
-
-    <br>
-
-    <button (click)="close()">Cerrar</button>
-
-  </div>
-
+<div *ngIf="loading">
+  Cargando...
 </div>
+
+<table border="1" width="100%" cellpadding="8" *ngIf="!loading && data.length">
+  <thead>
+    <tr>
+      
+      <th>Puerta</th>
+      <th>Fecha</th>
+      <th>Cuota mes</th>
+      <th>Derrama</th>
+      <th>Pago</th>
+      <th>Deuda</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of data">
+      
+      <td>{{ item.puerta }}</td>
+      <td>{{ item.fecha }}</td>
+      <td>{{ item.cuota_mes }}</td>
+      <td>{{ item.derrama }}</td>
+      <td>{{ item.pago }}</td>
+      <td>{{ item.deuda }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="!loading && !data.length">
+  No hay datos para esta puerta
+</p>

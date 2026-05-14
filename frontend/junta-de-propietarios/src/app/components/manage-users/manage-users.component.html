@@ -1,28 +1,51 @@
-<section *ngIf="user.role === 'admin'">
+<section *ngIf="user.rol === 'admin'">
+
   <h2>Gestión de usuarios</h2>
 
   <!-- FORMULARIO -->
-  <form (ngSubmit)="save()" #userForm="ngForm" style="border: 1px solid #ccc; padding: 12px; margin-bottom: 20px;">
+  <form (ngSubmit)="save()" #userForm="ngForm"
+        style="border: 1px solid #ccc; padding: 12px; margin-bottom: 20px;">
 
     <h3>
       {{ selectedUser ? 'Editar usuario' : 'Crear usuario' }}
     </h3>
 
     <!-- EMAIL -->
-    <input type="email" [(ngModel)]="formUser.email" name="email" placeholder="Email" required />
+    <label>Email</label><br>
+    <input type="email"
+           [(ngModel)]="formUser.email"
+           name="email"
+           placeholder="Email"
+           required />
 
     <br><br>
 
     <!-- PASSWORD -->
-    <input type="password" [(ngModel)]="formUser.password" name="password" placeholder="Password" />
+    <label>Password</label><br>
+    <input type="password"
+           [(ngModel)]="formUser.password"
+           name="password"
+           placeholder="Password" />
 
     <br><br>
 
-    <!-- ROLE -->
-    <select [(ngModel)]="formUser.role" name="role">
+    <!-- ROL -->
+    <label>Rol</label><br>
+    <select [(ngModel)]="formUser.rol" name="rol">
       <option value="user">User</option>
       <option value="admin">Admin</option>
+      <option value="propietario">Propietario</option>
+      <option value="junta">Junta</option>
     </select>
+
+    <br><br>
+
+    <!-- PUERTA -->
+    <label>Puerta</label><br>
+    <input type="text"
+           [(ngModel)]="formUser.puerta_usuario"
+           name="puerta_usuario"
+           placeholder="Ej: 1A, 2B..." />
 
     <br><br>
 
@@ -31,7 +54,9 @@
       {{ selectedUser ? 'Actualizar' : 'Crear' }}
     </button>
 
-    <button type="button" *ngIf="selectedUser" (click)="resetForm()">
+    <button type="button"
+            *ngIf="selectedUser"
+            (click)="resetForm()">
       Cancelar
     </button>
 
@@ -41,39 +66,48 @@
   <h3>Usuarios</h3>
 
   <table border="1" width="100%" cellpadding="8">
+
     <thead>
       <tr>
         <th>Email</th>
         <th>Rol</th>
+        <th>Puerta</th>
+        <th>Activo</th>
         <th>Acciones</th>
       </tr>
     </thead>
 
     <tbody>
       <tr *ngFor="let user of users">
-        <td>{{ user.email }}</td>
-        <td>{{ user.role }}</td>
 
+        <!-- EMAIL -->
+        <td>{{ user.email }}</td>
+
+        <!-- ROL -->
+        <td>{{ user.rol }}</td>
+
+        <!-- PUERTA -->
+        <td>{{ user.puerta_usuario || 'N/A' }}</td>
+
+        <!-- ACTIVO -->
+        <td>{{ user.activo ? 'Sí' : 'No' }}</td>
+
+        <!-- ACCIONES -->
         <td>
+
           <button type="button" (click)="selectUser(user)">
             Editar
           </button>
 
-          <button type="button" (click)="deactivateUser(user.id!)">
-            Desactivar
+          <button type="button" (click)="toggleActive(user)">
+            {{ user.activo ? 'Desactivar' : 'Activar' }}
           </button>
 
-          <button *ngIf="user.role !== 'propietario'"
-                type="button"
-                (click)="openAccounting(user)">
-          Contabilidad
-        </button>
         </td>
+
       </tr>
     </tbody>
+
   </table>
-  <app-accounting
-  [puerta]="selectedPuerta"
-  [visible]="showAccounting">
-</app-accounting>
+
 </section>
