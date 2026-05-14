@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -22,15 +22,17 @@ export class ManageUsersComponent {
     role: 'user'
   };
 
-  user = { role: 'admin' }; // ock rol admin para mostrar gestión de usuarios
-  // ser = this.authService.getUser(); // rol real desde localStorage
+  // user = { role: 'admin' }; // ock rol admin para mostrar gestión de usuarios
+  user = null; // rol real desde localStorage
 
   constructor(
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
+    this.user = this.authService.getUser();
     this.loadUsers();
   }
 
@@ -114,8 +116,8 @@ export class ManageUsersComponent {
     this.selectedUser ? this.updateUser() : this.createUser();
   }
 
-  //  delete (temporal frontend)
-  deleteUser(user: any) {
+  //  deactivate (temporal frontend)
+  deactivateUser(user: any) {
     this.users = this.users.filter(u => u.email !== user.email);
   }
 

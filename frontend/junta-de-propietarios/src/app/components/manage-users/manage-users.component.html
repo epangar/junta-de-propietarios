@@ -1,5 +1,5 @@
 <section *ngIf="user.role === 'admin'">
-  <h2>Manage Users</h2>
+  <h2>Gestión de usuarios</h2>
 
   <!-- FORMULARIO -->
   <form (ngSubmit)="save()" #userForm="ngForm" style="border: 1px solid #ccc; padding: 12px; margin-bottom: 20px;">
@@ -59,8 +59,8 @@
             Editar
           </button>
 
-          <button type="button" (click)="deleteUser(user.id!)">
-            Eliminar
+          <button type="button" (click)="deactivateUser(user.id!)">
+            Desactivar
           </button>
 
           <button type="button" (click)="openAccounting(user)">
