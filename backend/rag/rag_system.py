@@ -7,7 +7,8 @@ from typing import List, Tuple, Dict, Any
 import numpy as np
 import os
 import re
-from config import settings
+from rag import config
+from rag.config import settings
 
 class ElasticsearchRAGSystem:
     def __init__(self):

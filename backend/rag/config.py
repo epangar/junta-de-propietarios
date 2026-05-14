@@ -1,5 +1,4 @@
 from pydantic_settings import BaseSettings
-
 class Settings(BaseSettings):
     # Elasticsearch
     ELASTICSEARCH_URL: str = "http://localhost:9200"

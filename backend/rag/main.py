@@ -3,7 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any
 from rag_system import initialize_rag_system
-from config import settings
+from rag import config
+from rag.config import settings
 import uvicorn
 
 app = FastAPI(
