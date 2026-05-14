@@ -17,6 +17,7 @@ export class SummaryComponent implements OnInit {
   error: string | null = null;
 
   year: number = 2026;
+  category: string = "";
 
   constructor(
     private summaryService: SummaryService,
@@ -40,7 +41,13 @@ export class SummaryComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.summaryService.getSummary(this.year).subscribe({
+    this.loadSummaryByYear(this.year);
+    this.loadSummaryByCategory(this.year);
+  }
+
+  // CARGA POR AÑO
+  loadSummaryByYear(year: number) {
+    this.summaryService.getSummaryByYear(year).subscribe({
       next: (data: any) => {
         this.summary = data;
         this.loading = false;
@@ -53,4 +60,6 @@ export class SummaryComponent implements OnInit {
       }
     });
   }
+
+  loadSummaryByCategory(year: number) {}   
 }

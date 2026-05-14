@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     jwt_expire_minutes: int = 480
     angular_origins: str = "http://localhost:4200,http://127.0.0.1:4200"
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     @property
     def angular_origins_list(self) -> list[str]:

@@ -1,0 +1,14 @@
+# Python-generated files
+# Ignora todas las carpetas __pycache__ del proyecto, no importa dónde estén
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.env

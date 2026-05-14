@@ -63,11 +63,17 @@
             Desactivar
           </button>
 
-          <button type="button" (click)="openAccounting(user)">
-            Contabilidad
-          </button>
+          <button *ngIf="user.role !== 'propietario'"
+                type="button"
+                (click)="openAccounting(user)">
+          Contabilidad
+        </button>
         </td>
       </tr>
     </tbody>
   </table>
+  <app-accounting
+  [puerta]="selectedPuerta"
+  [visible]="showAccounting">
+</app-accounting>
 </section>

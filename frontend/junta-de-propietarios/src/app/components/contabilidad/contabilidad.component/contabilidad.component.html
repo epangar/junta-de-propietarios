@@ -1,0 +1,39 @@
+<div *ngIf="visible" class="overlay">
+
+  <div class="modal">
+
+    <h2>Contabilidad {{ puerta }}</h2>
+
+    <div *ngIf="loading">Cargando...</div>
+
+    <table *ngIf="!loading" border="1" width="100%" cellpadding="6">
+
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Cuota</th>
+          <th>Derrama</th>
+          <th>Pago</th>
+          <th>Deuda</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of data">
+          <td>{{ item.fecha }}</td>
+          <td>{{ item.cuota_mes }}</td>
+          <td>{{ item.derrama }}</td>
+          <td>{{ item.pago }}</td>
+          <td>{{ item.deuda }}</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+    <br>
+
+    <button (click)="close()">Cerrar</button>
+
+  </div>
+
+</div>

@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { UserService } from '../../services/user/user.service';
 import { AuthService } from '../../services/auth/auth.service';
+import {AccountingComponent} from '../contabilidad/contabilidad.component/contabilidad.component';
 
 @Component({
   selector: 'app-manage-users',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AccountingComponent],
   templateUrl: './manage-users.component.html'
 })
 export class ManageUsersComponent {
@@ -24,7 +25,8 @@ export class ManageUsersComponent {
 
   // user = { role: 'admin' }; // ock rol admin para mostrar gestión de usuarios
   user = {role: ''}; // rol real desde localStorage
-
+showAccounting = false;
+selectedPuerta = '';
   constructor(
     private userService: UserService,
     private authService: AuthService,
@@ -124,5 +126,8 @@ export class ManageUsersComponent {
   //  acción contabilidad
   openAccounting(user: any) {
     console.log('Contabilidad del usuario:', user);
+    this.selectedPuerta = user.puerta; 
+    // o cualquier identificador único
+    this.showAccounting = true;
   }
 }

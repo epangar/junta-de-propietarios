@@ -10,19 +10,33 @@ export class SummaryService {
 
   constructor(private http: HttpClient) {}
 
-  getSummary(year: number): Observable<any> {
+  getSummaryByYear(year: number): Observable<any> {
 
-  const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-  const headers = new HttpHeaders({
-    'Authorization': `Bearer ${token || ''}`
-  });
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token || ''}`
+    });
 
-  return this.http.get(
-    `${environment.BASEURL}/resumen/${year}`,
-    { headers }
-  );
-}
+    return this.http.get(
+      `${environment.BASEURL}/resumen/anio/${year}`,
+      { headers }
+    );
+  }
+
+  getSummaryByCategory(category: string): Observable<any> {
+
+    const token = localStorage.getItem('token');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token || ''}`
+    });
+
+    return this.http.get(
+      `${environment.BASEURL}/resumen/categoria/${category}`,
+      { headers }
+    );
+  }
 
   
 }
